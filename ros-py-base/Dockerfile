@@ -1,5 +1,5 @@
 FROM ubuntu:16.04
-MAINTAINER "Abhinav Katiyar <katiyar.abhinav@gmail.com>"
+MAINTAINER "Abhinav K"
 
 RUN apt-get update \
     && apt-get install -yq lsb-release \
