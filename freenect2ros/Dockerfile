@@ -55,3 +55,12 @@ RUN apt-get update \
         ros-kinetic-image-transport-plugins ros-kinetic-perception-pcl \
         ros-kinetic-perception ros-kinetic-message-runtime \
     && rm -rf /var/lib/apt/lists/*
+
+LABEL com.nvidia.volumes.needed="nvidia_driver"
+
+RUN echo "/usr/local/nvidia/lib" >> /etc/ld.so.conf.d/nvidia.conf && \
+    echo "/usr/local/nvidia/lib64" >> /etc/ld.so.conf.d/nvidia.conf
+
+ENV PATH /usr/local/nvidia/bin:${PATH}
+ENV LD_LIBRARY_PATH /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+
