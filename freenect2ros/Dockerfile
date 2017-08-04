@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -yq \
     libusb-1.0.0-dev \
     libturbojpeg libjpeg-turbo8-dev \
     libglfw3-dev \
-#    beignet-dev opencl-headers \
+    beignet-dev opencl-headers \
     libva-dev libjpeg-dev \
     libopenni2-0 libopenni2-dev openni2-utils \
     udev \
