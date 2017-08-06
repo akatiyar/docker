@@ -2,7 +2,7 @@ FROM nvidia/cuda
 MAINTAINER "Abhinav K"
 
 # the samples folder is needed for libfreenect2
-COPY samples /usr/local/cuda/samples
+#COPY samples /usr/local/cuda/samples
 
 # Based on https://github.com/OpenKinect/libfreenect2
 # and https://hub.docker.com/r/nucleardreamer/libfreenect2/
@@ -14,11 +14,13 @@ RUN apt-get update && apt-get install -yq \
     libusb-1.0.0-dev \
     libturbojpeg libjpeg-turbo8-dev \
     libglfw3-dev \
-    beignet-dev opencl-headers clinfo \
+    beignet-dev \
+    nvidia-modprobe opencl-headers clinfo \
     libva-dev libjpeg-dev \
     libopenni2-0 libopenni2-dev openni2-utils \
     udev \
     git \
+    cuda-samples-$CUDA_PKG_VERSION \
     && rm -rf /var/lib/apt/lists/*
 
 # Build freenect2 from source
