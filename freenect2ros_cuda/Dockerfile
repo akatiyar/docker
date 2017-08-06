@@ -1,8 +1,8 @@
 FROM nvidia/cuda
 MAINTAINER "Abhinav K"
 
-# the samples folder is needed for libfreenect2
-#COPY samples /usr/local/cuda/samples
+# keyboard config is needed for nvidia-opencl-icd-384 
+COPY ./keyboard /etc/default/keyboard
 
 # Based on https://github.com/OpenKinect/libfreenect2
 # and https://hub.docker.com/r/nucleardreamer/libfreenect2/
