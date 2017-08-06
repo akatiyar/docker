@@ -10,6 +10,9 @@
 #
 # Here, `dockerhost` is the IP address or FQDN of a host running the Docker daemon
 # which acts as an APT proxy server.
+#
+# You can start/stop apt-cacher, however, if you remove it or run with "--rm",
+# you will not be able to use cache.
 
 FROM ubuntu:16.04
 
