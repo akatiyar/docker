@@ -11,6 +11,10 @@ MAINTAINER "Abhinav K"
 ## Uncomment libva-dev libjpeg-dev if you want to install Intel VAAPI
 RUN apt-get update && apt-get install -yq \
     build-essential cmake pkg-config \
+    software-properties-common \
+    && add-apt-repository -y ppa:graphics-drivers/ppa \
+    && apt-get update \
+    && apt-get install -yq nvidia-opencl-icd-384 \
     libusb-1.0.0-dev \
     libturbojpeg libjpeg-turbo8-dev \
     libglfw3-dev \
