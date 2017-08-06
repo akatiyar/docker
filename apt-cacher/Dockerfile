@@ -1,6 +1,6 @@
 # Based on https://docs.docker.com/engine/examples/apt-cacher-ng/
 # Build: docker build -t akatiyar/apt-cacher .
-# Run: docker run --name apt-cacher -d -p 3142:3142 akatiyar/apt-cacher 
+# Run: docker run --name apt-cacher -d -p 3142:3142 akatiyar/apt-cacher
 #
 # and then you can build container with:
 # docker build --build-arg http_proxy="http://dockerhost:3142" -t akatiyar/freenect2ros_cuda .
