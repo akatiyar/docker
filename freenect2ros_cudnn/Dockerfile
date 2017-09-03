@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -yq \
     udev \
     git \
     cuda-samples-$CUDA_PKG_VERSION \
+    xvfb \
     && rm -rf /var/lib/apt/lists/*
 
 # Build freenect2 from source
