@@ -61,3 +61,6 @@ RUN apt-get update \
         ros-kinetic-image-transport-plugins ros-kinetic-perception-pcl \
         ros-kinetic-perception ros-kinetic-message-runtime \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip install --upgrade pip \
+    && pip install redis
