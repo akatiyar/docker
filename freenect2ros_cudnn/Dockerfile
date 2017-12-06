@@ -1,6 +1,8 @@
 FROM nvidia/cuda:8.0-cudnn6-devel
 MAINTAINER "Abhinav K"
 
+COPY ./keyboard /etc/default/keyboard
+
 # Based on https://github.com/OpenKinect/libfreenect2
 # and https://hub.docker.com/r/nucleardreamer/libfreenect2/
 ## Uncomment libglfw3-dev if you want to install OpenGL
