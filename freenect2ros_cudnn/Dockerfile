@@ -65,4 +65,4 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --upgrade pip \
-    && pip install redis flask flask-restful
+    && pip install redis flask flask-restful shapely
