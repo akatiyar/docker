@@ -76,9 +76,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# TBD: Install TensorFlow GPU version.
-RUN pip --no-cache-dir install \
-    https://pypi.python.org/packages/a1/ce/5bada74b1de0cfaafcc982291230ee987a769ace8ed9dedb36dbfe1bffc0/tensorflow_gpu-1.7.0-cp27-cp27mu-manylinux1_x86_64.whl#md5=c9af0f7d6de3e53ba0e66db39626f71c
+# Install TensorFlow GPU version - custom-built.
+COPY ./tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
+
+RUN pip --no-cache-dir install /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
+
+COPY ./libtensorflow_cc.so /usr/local/lib/python2.7/dist-packages/tensorflow/
 
 # TensorBoard
 EXPOSE 6006
