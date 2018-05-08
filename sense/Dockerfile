@@ -1,7 +1,7 @@
 FROM nvidia/cuda:9.0-cudnn7-devel
 MAINTAINER "Abhinav K"
 
-# TF dependencies - 1
+## TF dependencies - 1
 RUN apt-get update && apt-get install -y --no-install-recommends \
         build-essential \
         curl \
@@ -18,8 +18,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# TF dependencies - 2
-RUN pip --no-cache-dir install --upgrade pip \
+## TF dependencies - 2
+RUN pip install --upgrade pip==9.0.3 \
     && pip --no-cache-dir install setuptools \
     && pip --no-cache-dir install \
         Pillow \
@@ -37,7 +37,7 @@ RUN pip --no-cache-dir install --upgrade pip \
         shapely \
     && python -m ipykernel.kernelspec
 
-# Install Realsense drivers
+## Install Realsense drivers
 RUN sh -c 'echo "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo $(lsb_release -sc) main" > /etc/apt/sources.list.d/realsense-public.list' \
     && apt-key adv --keyserver keys.gnupg.net --recv-key 6F3EFCDE \
     && apt-get update && apt-get install -y --no-install-recommends \
@@ -48,38 +48,48 @@ RUN sh -c 'echo "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# ROS
-# Based on http://wiki.ros.org/kinetic/Installation/Ubuntu
+## ROS Kinetic (https://hub.docker.com/_/ros/)
+# install packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        lsb-release \
-    && sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list' \
-    && apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 \
-    && apt-get update && apt-get install -y --no-install-recommends \
-        ros-kinetic-desktop-full \
-        python-rosinstall \
-        python-rosinstall-generator \
-        python-wstool \
-    && mkdir -p /catkin_ws/src \
-    && cd /catkin_ws \
-    && echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc \
-    && /bin/bash -c "source /opt/ros/kinetic/setup.bash; catkin_make" \
-    && rosdep init \
-    && rosdep update \
-    && apt-get install -y --no-install-recommends \
-        ros-kinetic-vision-opencv \
-        ros-kinetic-cv-bridge \
-        ros-kinetic-compressed-depth-image-transport \
-        ros-kinetic-image-transport-plugins \
-        ros-kinetic-perception-pcl \
-        ros-kinetic-perception \
-        ros-kinetic-message-runtime \
-    && apt-get clean \
+    dirmngr \
+    gnupg2 \
+    lsb-release \
     && rm -rf /var/lib/apt/lists/*
 
-# Install TensorFlow GPU version - custom-built.
+# setup keys
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 421C365BD9FF1F717815A3895523BAEEB01FA116
+
+# setup sources.list
+RUN echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list
+
+# install bootstrap tools
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    python-rosdep \
+    python-rosinstall \
+    python-vcstools \
+    && rm -rf /var/lib/apt/lists/*
+
+# setup environment
+ENV LANG C.UTF-8
+ENV LC_ALL C.UTF-8
+
+# bootstrap rosdep
+RUN rosdep init \
+    && rosdep update
+
+# install ros packages
+ENV ROS_DISTRO kinetic
+RUN apt-get update && apt-get install -y \
+    ros-kinetic-ros-core=1.3.2-0* \
+    ros-kinetic-ros-base=1.3.2-0* \
+    ros-kinetic-perception=1.3.2-0* \
+    && rm -rf /var/lib/apt/lists/*
+
+## Install TensorFlow GPU version - custom-built.
 COPY ./tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
 
-RUN pip --no-cache-dir install /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
+RUN pip --no-cache-dir install /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl \
+    && rm /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
 
 COPY ./libtensorflow_cc.so /usr/local/lib/python2.7/dist-packages/tensorflow/
 
@@ -88,4 +98,7 @@ EXPOSE 6006
 # IPython
 EXPOSE 8888
 
-# WORKDIR "/notebooks"
+COPY ./ros_entrypoint.sh /
+
+ENTRYPOINT ["/ros_entrypoint.sh"]
+CMD ["bash"]
