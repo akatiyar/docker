@@ -93,6 +93,11 @@ RUN pip --no-cache-dir install /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.wh
 
 COPY ./libtensorflow_cc.so /usr/local/lib/python2.7/dist-packages/tensorflow/
 
+# Create and configure top-level catkin workspace
+RUN mkdir -p /root/store/src \
+    && cd /root/store \
+&& /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash; catkin_make"
+
 # TensorBoard
 EXPOSE 6006
 # IPython
