@@ -31,10 +31,6 @@ RUN pip install --upgrade pip==9.0.3 \
         pandas \
         scipy \
         sklearn \
-        redis \
-        flask \
-        flask-restful \
-        shapely \
     && python -m ipykernel.kernelspec
 
 ## Install Realsense drivers
@@ -45,6 +41,7 @@ RUN sh -c 'echo "deb http://realsense-hw-public.s3.amazonaws.com/Debian/apt-repo
         librealsense2-utils \
         librealsense2-dev \
         librealsense2-dbg \
+        libusb-1.0.0-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -83,6 +80,9 @@ RUN apt-get update && apt-get install -y \
     ros-kinetic-ros-core=1.3.2-0* \
     ros-kinetic-ros-base=1.3.2-0* \
     ros-kinetic-perception=1.3.2-0* \
+    ros-kinetic-rqt \
+    ros-kinetic-rqt-common-plugins \
+    ros-kinetic-rviz \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install TensorFlow GPU version - custom-built.
@@ -93,10 +93,20 @@ RUN pip --no-cache-dir install /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.wh
 
 COPY ./libtensorflow_cc.so /usr/local/lib/python2.7/dist-packages/tensorflow/
 
+# Flask and Redis Dependencies
+RUN pip --no-cache-dir install \
+    redis \
+    flask \
+    flask-restful \
+    flask-jwt-simple \
+    shapely
+
 # Create and configure top-level catkin workspace
 RUN mkdir -p /root/store/src \
     && cd /root/store \
-&& /bin/bash -c "source /opt/ros/$ROS_DISTRO/setup.bash; catkin_make"
+&& /bin/bash -c "source /opt/ros/kinetic/setup.bash; catkin_make"
+
+ENV NVIDIA_DRIVER_CAPABILITIES ${NVIDIA_DRIVER_CAPABILITIES},video,display
 
 # TensorBoard
 EXPOSE 6006
