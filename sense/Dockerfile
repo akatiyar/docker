@@ -101,7 +101,8 @@ RUN pip --no-cache-dir install \
     flask-jwt-simple \
     passlib \
     flask-cors \
-    shapely
+    shapely \
+    requests
 
 # Create and configure top-level catkin workspace
 RUN mkdir -p /root/store/src \
