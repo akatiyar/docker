@@ -1,4 +1,4 @@
-FROM nvidia/cuda:9.0-cudnn7-devel
+FROM nvidia/cuda:9.2-cudnn7-devel
 MAINTAINER "Abhinav K"
 
 ## TF dependencies - 1
@@ -86,10 +86,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 ## Install TensorFlow GPU version - custom-built.
-COPY ./tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
+COPY ./tensorflow-1.8.0-cp27-cp27mu-linux_x86_64.whl /tmp/tensorflow-1.8.0-cp27-cp27mu-linux_x86_64.whl
 
-RUN pip --no-cache-dir install /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl \
-    && rm /tmp/tensorflow-1.7.0-cp27-cp27mu-linux_x86_64.whl
+RUN pip --no-cache-dir install /tmp/tensorflow-1.8.0-cp27-cp27mu-linux_x86_64.whl \
+    && rm /tmp/tensorflow-1.8.0-cp27-cp27mu-linux_x86_64.whl
 
 COPY ./libtensorflow_cc.so /usr/local/lib/python2.7/dist-packages/tensorflow/
 
@@ -99,7 +99,10 @@ RUN pip --no-cache-dir install \
     flask \
     flask-restful \
     flask-jwt-simple \
-    shapely
+    passlib \
+    flask-cors \
+    shapely \
+    requests
 
 # Create and configure top-level catkin workspace
 RUN mkdir -p /root/store/src \
