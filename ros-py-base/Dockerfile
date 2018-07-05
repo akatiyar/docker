@@ -7,7 +7,7 @@ RUN apt-get update \
     && apt-key adv --keyserver hkp://ha.pool.sks-keyservers.net:80 --recv-key 421C365BD9FF1F717815A3895523BAEEB01FA116 \
     && apt-get update \
     && apt-get install -yq python-dev python-pip \
-    && pip install --upgrade distribute RPi.GPIO pyserial redis requests \
+    && pip install --upgrade distribute RPi.GPIO pyserial redis requests futures \
     && apt-get install -yq ros-kinetic-ros-base \
        python-rosinstall python-rosinstall-generator python-wstool build-essential \
     && rosdep init \
